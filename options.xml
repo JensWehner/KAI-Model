@@ -2,6 +2,7 @@
     <geometry>
         <numofgrains>100</numofgrains>
         <anglewindow><anglewindow>
+        <safetyscale>0.95</safetyscale>
         <width unit="?">5</width>
     </geometry>
     <material>
