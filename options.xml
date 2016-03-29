@@ -1,0 +1,27 @@
+<options>
+    <geometry>
+        <numofgrains>100</numofgrains>
+        <anglewindow><anglewindow>
+        <width unit="?">5</width>
+    </geometry>
+    <material>
+        <epsilon help="xx xy yy">5 5 5</epsilon>
+        <tau>1</tau>
+        <Ea>2</Ea>
+        <Ps>5</Ps>
+        <beta>2</beta>
+    </material>
+    <save>
+       <savefile>initial.jens</savefile>
+    </save>
+    <run>
+        <voltages>0 1 2 3 4 5</voltages>
+        <maxsteps></maxsteps>
+    </run>
+
+    <integrator>
+        <errlim0>0.1</errlim0>
+        <deltat0>0.1</deltat0>
+        <safetyfactor>1</safetyfactor>
+    </integrator>
+</options>

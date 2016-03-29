@@ -442,10 +442,10 @@ for Voltage in Voltagerange:
 	
         #Erstellung der Log Dateien
         np.savetxt('log.txt',log,'%0.5f',' ','&')
-	np.savetxt('logzex.txt',logzex,'%0.5f',' ','&')
+	    np.savetxt('logzex.txt',logzex,'%0.5f',' ','&')
         np.savetxt('logzey.txt',logzey,'%0.5f',' ','&')
-	np.savetxt('logzemag.txt',logzemag,'%0.5f',' ','&')
-	f=open('log.txt','r')
+	    np.savetxt('logzemag.txt',logzemag,'%0.5f',' ','&')
+	    f=open('log.txt','r')
         content=f.readlines()
         f.close()
 
