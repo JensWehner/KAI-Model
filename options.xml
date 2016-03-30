@@ -4,7 +4,6 @@
         <anglewindow unit="degree">45</anglewindow>
         <safetyscale>0.95</safetyscale>
         <width unit="?">1</width>
-
     </geometry>
     <material>
         <epsilon help="xx xy yy">5 5 5</epsilon>
@@ -18,12 +17,15 @@
     </save>
     <run>
         <voltages>0 1 2 3 4 5</voltages>
-        <maxsteps></maxsteps>
+        <maxsteps>3000</maxsteps>
+        <output>100</output>
+        <file>output</file>
     </run>
 
     <integrator>
         <errlim0>0.1</errlim0>
-        <deltat0>0.1</deltat0>
+        <delta0>0.1</delta0>
         <safetyfactor>1</safetyfactor>
+        <threads>4</threads>
     </integrator>
 </options>
