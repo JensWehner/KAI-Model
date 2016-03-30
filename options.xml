@@ -1,9 +1,10 @@
 <options>
     <geometry>
-        <numofgrains>100</numofgrains>
-        <anglewindow><anglewindow>
+        <numofgrains>200</numofgrains>
+        <anglewindow unit="degree">45</anglewindow>
         <safetyscale>0.95</safetyscale>
-        <width unit="?">5</width>
+        <width unit="?">1</width>
+
     </geometry>
     <material>
         <epsilon help="xx xy yy">5 5 5</epsilon>

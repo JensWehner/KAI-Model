@@ -22,6 +22,8 @@ args=parser.parse_args()
 Geometry =geometry() 
 Geometry.readoptions(args.option)
 Geometry.setupGrainstructure()
+Geometry.assignpoldirection()
+Geometry.printstructuretofile()
 
 
 
