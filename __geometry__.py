@@ -28,13 +28,13 @@ class geometry:
     def createSeed(self):
         a0=np.random.rand(self.numberofgrains,2)
         self.seeds=self.width*((a0*self.safetyscale)+(1.0-self.safetyscale)/2.0)
-        self.box=[[0,self.width],[0,self.width]]
+        self.box=np.array([[0,self.width],[self.width,0]])
 
     def setupGrainstructure(self):
         #see https://pypi.python.org/pypi/pyvoro/1.3.2
         self.cells=pyvoro.compute_2d_voronoi(self.seeds,self.box,2.0)
         self.setupVolfracs()
-        self.printtoscreen()
+        #self.printtoscreen()
 
     def setupVolfracs(self):
         Volumes=[]
@@ -61,28 +61,28 @@ class geometry:
         ax1.scatter(self.width*self.seeds[:,0],self.width*self.seeds[:,1])        
         scaling=self.width/np.sqrt(self.numberofgrains)
         if type(self.angles)!= None:
-            for dr,seed in zip(scaling*self.Pdirections,self.seeds):
+            for dr,seed in zip(scaling*self.Pdirections.T,self.seeds):
                ax1.add_patch(patches.Arrow(self.width*seed[0],self.width*seed[1],dr[0],dr[1],width=0.25*scaling,color="black"))
                     
         fig1.savefig('structure.png', dpi=90, bbox_inches='tight')     
 
     def assignpoldirection(self):
         angles=(np.random.rand(self.numberofgrains,1).T)[0]*self.angle-self.angle/2.0+np.pi/2.0
-        self.Pdirections=np.array([np.cos(self.angles),np.sin(self.angles)])
+        self.Pdirections=np.array([np.cos(angles),np.sin(angles)])
 
     def writetoxml(self,root):
-        geo=lxml.subelement(root,"geometry"))
-        box=lxml.subelement(geo,"box"))
-        for vector in self.box:
-            lxml.subelement(box,"vector",x=vector[0],y=vector[1]))
-        grains=lxml.subelement(geo,"grains"))
-        for seed,pdirection in zip(self.seed,self.Pdirections):
-            grain=lxml.subelement(grains,"grain",x=seed[0],y=seed[1],px=pdirection[0],py=pdirection[1]))
+        geo=lxml.SubElement(root,"geometry")
+        box=lxml.SubElement(geo,"box")
+        for vector in self.box.T:
+            lxml.SubElement(box,"vector",x="{:1.5f}".format(vector[0]),y="{:1.5f}".format(vector[1]))
+        grains=lxml.SubElement(geo,"grains")
+        for i,(seed,pdirection) in enumerate(zip(self.seeds,self.Pdirections.T)):
+            grain=lxml.SubElement(grains,"grain",id="{:d}".format(i+1),x="{:1.5f}".format(seed[0]),y="{:1.5f}".format(seed[1]),px="{:1.5f}".format(pdirection[0]),py="{:1.5f}".format(pdirection[1]))
             
 
 
     def readfromxml(self,xmlfile):
-
+        return
     
         
         
