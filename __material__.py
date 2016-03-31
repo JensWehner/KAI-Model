@@ -46,5 +46,5 @@ class material:
         vector2=np.array([-vector1[1],vector1[0]])
         transmatrix=np.array([vector1,vector2])
         self.epsilon=np.einsum('ihl,ij,jkl->hkl',transmatrix,self.e,transmatrix)
-        print self.epsilon.shape
+        #print self.epsilon.shape
        

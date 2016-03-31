@@ -15,7 +15,8 @@ class geometry:
         self.safetyscale=0.95
         self.cells=None
         self.angles=None
-        self.volume=self.width**2
+        self.volume=0
+        self.boundarylayer=0.003
         
     def readoptions(self,optionfile):
         geometry = Parser(optionfile,"geometry")     
@@ -23,7 +24,8 @@ class geometry:
         self.angle=float(geometry.find("anglewindow").text)*np.pi/180.0  #convert to radian
         self.width=float(geometry.find("width").text)
         self.safetyscale=float(geometry.find("safetyscale").text)
-
+        self.boundarylayer=float(geometry.find("boundarylayer").text)
+        self.volume=self.width**2
 
     def createSeed(self):
         a0=np.random.rand(self.numberofgrains,2)
@@ -33,6 +35,17 @@ class geometry:
     def setupGrainstructure(self):
         #see https://pypi.python.org/pypi/pyvoro/1.3.2
         self.cells=pyvoro.compute_2d_voronoi(self.seeds,self.box,2.0)
+        for cell in self.cells:
+            coordinates=cell['vertices']
+            for coordinate in coordinates:
+                #print "before",coordinate
+                if coordinate[0]<self.boundarylayer*self.width:
+                   
+                    coordinate[0]=self.boundarylayer*self.width
+                    
+                elif coordinate[0]>(1-self.boundarylayer)*self.width:
+                    coordinate[0]=(1-self.boundarylayer)*self.width
+                #print "after",coordinate
         self.setupVolfracs()
         #self.printtoscreen()
 
@@ -44,6 +57,7 @@ class geometry:
         self.volfrac=Volumes/np.sum(Volumes)
 
     def getVolumes(self):
+        
         return self.volfrac*self.volume
        
 

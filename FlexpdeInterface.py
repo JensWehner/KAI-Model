@@ -40,9 +40,12 @@ if args.restart==False:
 Material.setupGrainproperties(Geometry)
 
 Geometry.printstructuretopng()
-for voltage in voltages:
+for i,voltage in enumerate(voltages):
+    print "Starting calculation for V={}".format(voltage)
+    print "Voltage {} of {}".format(i+1,len(voltages))
     start=datetime.datetime.now()
     outputfile="{}_{}V.xml".format(outfile,voltage)
+    print "Writing output to \'{}\'".format(outputfile)
     runlog = lxml.Element("runlog",start=start.ctime(),V="{:1.3f}".format(voltage),steps="{:d}".format(maxsteps))
     Geometry.writetoxml(runlog)
     Material.writetoxml(runlog)
@@ -56,6 +59,7 @@ for voltage in voltages:
     runlog.set("end",end.ctime())
     with open(outputfile, 'w') as f:
             f.write(lxml.tostring(runlog, pretty_print=True))
+    print "Finished calculation for V={}".format(voltage)
 
 
 

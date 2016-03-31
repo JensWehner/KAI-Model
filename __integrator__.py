@@ -2,6 +2,7 @@ from __tools__ import Parser
 from __geometry__ import geometry
 from __material__ import material
 import scipy.constants as const
+import lxml.etree as lxml
 import numpy as np
 import subprocess 
 import time
@@ -26,6 +27,7 @@ class integrator():
         self.flexpdeinputfile="input.pde"
         self.flexdemeshfile="flex.mesh"
         self.flexdeoutputfile="output.out"
+        
 
     def setOutput(self,root,outputfreq,outfile):
         self.root=root
@@ -37,7 +39,7 @@ class integrator():
         P=P0
         t=self.t0
         deltat=100.*self.delta0
-        
+        print "Running Flexpde on {} threads".format(self.threads)
         for step in xrange(maxstep):
             start=time.time()
             if step==0:
@@ -48,7 +50,7 @@ class integrator():
             P=P+deltaP 
             t=t+deltat  
             stop=time.time() 
-            print "{} of {}, calctime={}:t={} P={}".format(step+1,maxstep,start-stop,P*self.geometry.Pdirections)
+            print "\tstep {} of {}\tcalctime={:1.3f} s\tsimtime={:1.3f} tau\tP={}".format(step+1,maxstep,stop-start,t,np.average(P*self.geometry.Pdirections[1]))
             if (step%self.outputfreq)==0:
                 self.appendOutput(t,step,P,E)
         return
@@ -80,12 +82,12 @@ class integrator():
 
 
     def rk_variabletimestep(self,voltage,P,t,deltat):
-        deltaystar,delta1,E=self.rk46(voltage,P,t,deltat)
+        deltaP,delta1,E=self.rk46(voltage,P,t,deltat)
         while delta1>self.delta0:
-            deltat=Safety*deltat*(np.absolute(self.delta0/delta1))**0.25
-            deltaystar,delta1,E=self.rk46(voltage,P,t,deltat)
+            deltat=self.safetyfactor*deltat*(np.absolute(self.delta0/delta1))**0.25
+            deltaP,delta1,E=self.rk46(voltage,P,t,deltat)
         else:
-            deltatnew=Safety*deltat*(np.absolute(delta0/delta1))**0.2
+            deltatnew=self.safetyfactor*deltat*(np.absolute(self.delta0/delta1))**0.2
             if deltatnew>10*deltat:
                 deltat=10*deltat
             else:
@@ -94,14 +96,14 @@ class integrator():
         
     def evaluatedP(self,voltage,P,t):
         E=self.evaluateE(voltage,P)
-        beta0=self.materials.beta
+        beta0=self.material.beta
         Ps=self.geometry.Pdirections
-        dP=(np.sign(E[1])-P)*(np.exp(-(1./np.absolute(np.dot(E,Ps)))))#**beta0*(beta0*t**(beta0-1.0))
+        dP=(np.sign(E[1])-P)*(np.exp(-(1./np.absolute(E[0]*Ps[0]+E[1]*Ps[1]))))#**beta0*(beta0*t**(beta0-1.0))
         return dP,E
 
     def evaluateE(self,voltage,P):
         self.writeFlexpdeinput(voltage,P,self.createmesh)
-        subprocess.call([os.path.join(self.flexpdeexepath,"flexpde6n"),"-Q",self.flexpdeinputfile])
+        subprocess.check_output([os.path.join(self.flexpdeexepath,"flexpde6n"),"-Q",self.flexpdeinputfile])
         E=self.readFlexpdeoutput()
         return E
 
@@ -125,7 +127,7 @@ class integrator():
             f.write("START(0,0)\nPERIODIC(x+{0},y)LINE TO (0,{0})\nVALUE(phi)=0 LINE TO ({0},{0})\nnobc(phi)\nLINE TO ({0},0)\nVALUE(phi)={1} LINE TO CLOSE\n".format(self.geometry.width,voltage))
             P=self.geometry.Pdirections*self.material.Ps*P
             for j,cell in enumerate(self.geometry.cells):
-                f.write("REGION {} \'Grain {}\'\n".format(j+2,j+1))
+                f.write("REGION {} \'Grain{}\'\n".format(j+2,j+1))
                 f.write("P=VECTOR({},{})\n".format(P[0,j],P[1,j]))
                 f.write("eaa={}\necc={}\neac={}\n".format(self.material.epsilon[0,0,j],self.material.epsilon[1,1,j],self.material.epsilon[1,0,j]))
                 vertices=cell['vertices']
@@ -152,7 +154,7 @@ class integrator():
                     if line[1]=="E" and "x" in line:
                         a.append(float(line.split()[1]))
                     elif line[1]=="E" and "y" in line:            
-                        b.append(float(line.split()[1]))        
+                        b.append(float(line.split()[1]))   
             E=np.array([a,b])/self.material.Ea/self.geometry.getVolumes()
         return E
 

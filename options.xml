@@ -1,8 +1,9 @@
 <options>
     <geometry>
-        <numofgrains>3</numofgrains>
+        <numofgrains>200</numofgrains>
         <anglewindow unit="degree">45</anglewindow>
         <safetyscale>0.95</safetyscale>
+        <boundarylayer>0.001</boundarylayer>
         <width unit="?">1</width>
     </geometry>
     <material>
@@ -13,9 +14,9 @@
         <beta>2</beta>
     </material>
     <run>
-        <voltages>0 1 2 3 4 5</voltages>
-        <maxsteps>3000</maxsteps>
-        <output>100</output>
+        <voltages>5</voltages>
+        <maxsteps>3</maxsteps>
+        <output>1</output>
         <outfile>save</outfile>
     </run>
 
