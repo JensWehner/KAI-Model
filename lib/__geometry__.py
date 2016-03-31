@@ -1,6 +1,6 @@
 import numpy as np
 import pyvoro
-from __tools__ import Parser
+from __flextools__ import Parser
 import lxml.etree as lxml
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -33,7 +33,7 @@ class geometry:
         self.box=np.array([[0,self.width],[self.width,0]])
 
     def setupGrainstructure(self):
-        #see https://pypi.python.org/pypi/pyvoro/1.3.2
+        #see http://pypi.python.org/pypi/pyvoro/1.3.2
         self.cells=pyvoro.compute_2d_voronoi(self.seeds,self.box,2.0)
         for cell in self.cells:
             coordinates=cell['vertices']

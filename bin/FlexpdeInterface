@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-from __tools__ import Parser
-from __tools__ import MyParser
+from __flextools__ import Parser
+from __flextools__ import MyParser
 from __geometry__ import geometry
 from __integrator__ import integrator
 from __material__ import material

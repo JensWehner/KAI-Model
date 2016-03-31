@@ -1,4 +1,4 @@
-from __tools__ import Parser
+from __flextools__ import Parser
 from __geometry__ import geometry
 from __material__ import material
 import scipy.constants as const
