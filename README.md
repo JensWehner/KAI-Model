@@ -4,7 +4,7 @@ Interface to Flexpde to integrate polarisation
 to run he program
 1. type "python install.py"
 2. type "source ~/.bashrc"
-3. use Flexpde
+3. run FlexpdeInterface
 
 Required python packages
 
