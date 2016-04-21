@@ -1,9 +1,9 @@
 <options>
     <geometry>
-        <numofgrains>200</numofgrains>
+        <numofgrains>10</numofgrains>
         <anglewindow unit="degree">45</anglewindow>
-        <safetyscale>0.95</safetyscale>
-        <boundarylayer>0.001</boundarylayer>
+        <safetyscale>0.998</safetyscale>
+        <boundarylayer>0.2</boundarylayer>
         <width unit="?">1</width>
     </geometry>
     <material>

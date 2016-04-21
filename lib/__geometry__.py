@@ -88,10 +88,10 @@ class geometry:
         geo=lxml.SubElement(root,"geometry")
         box=lxml.SubElement(geo,"box")
         for vector in self.box.T:
-            lxml.SubElement(box,"vector",x="{:1.5f}".format(vector[0]),y="{:1.5f}".format(vector[1]))
+            lxml.SubElement(box,"vector",x="{:1.5e}".format(vector[0]),y="{:1.5e}".format(vector[1]))
         grains=lxml.SubElement(geo,"grains")
         for i,(seed,pdirection) in enumerate(zip(self.seeds,self.Pdirections.T)):
-            grain=lxml.SubElement(grains,"grain",id="{:d}".format(i+1),x="{:1.5f}".format(seed[0]),y="{:1.5f}".format(seed[1]),px="{:1.5f}".format(pdirection[0]),py="{:1.5f}".format(pdirection[1]))
+            grain=lxml.SubElement(grains,"grain",id="{:d}".format(i+1),x="{:1.5e}".format(seed[0]),y="{:1.5e}".format(seed[1]),px="{:1.5e}".format(pdirection[0]),py="{:1.5e}".format(pdirection[1]))
             
 
 
