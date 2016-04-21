@@ -58,7 +58,7 @@ class integrator():
     def appendOutput(self,t,step,P,E):
         frame=lxml.SubElement(self.root,"frame",t="{:1.3e}".format(t),step="{:d}".format(step),Pavy="{:1.5e}".format(np.average(P*self.geometry.Pdirections[1])),Pavx="{:1.5e}".format(np.average(P*self.geometry.Pdirections[0])),Eavy="{:1.5e}".format(np.average(E[1]*self.geometry.volfrac)),Eavx="{:1.5e}".format(np.average(E[0]*self.geometry.volfrac)))
         for i,(e,p) in enumerate(zip(E.T,(P*self.geometry.Pdirections).T)):
-            lxml.SubElement(frame,"grain",id="{:d}".format(i+1),Px="{:1.5e}".format(p[0]),Py="{:1.5e}".format(p[1]),Ex="{:1.5e}".format(e[0]),Ey="{:1.5f}".format(e[1]))
+            lxml.SubElement(frame,"grain",id="{:d}".format(i+1),Px="{:1.5e}".format(p[0]),Py="{:1.5e}".format(p[1]),Ex="{:1.5e}".format(e[0]),Ey="{:1.5e}".format(e[1]))
         with open(self.outfile, 'w') as f:
             f.write(lxml.tostring(self.root, pretty_print=True))
 
